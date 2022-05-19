@@ -144,6 +144,18 @@ public:
         return const_cast<T *>(_mat._data.data() + _mat.__pos(base::_i + 1, 0));
     }
     inline me_t &operator*() { return *this; }
+    
+    friend std::ostream &operator<<(std::ostream &out, const me_t &me)
+    {
+        out << "[";
+        const T *x = me.begin();
+        const T *e = me.end() - 1;
+        while (x != e)
+        {
+            out << *(x++) << ", ";
+        }
+        return out << *e << "]";
+    }
 };
 
 // const index helper
@@ -176,10 +188,17 @@ public:
     }
     inline me_t &operator*() { return *this; }
 
-    template <typename U>
-    friend std::ostream &operator<<(
-        std::ostream &out,
-        const typename mat_t<U>::index_helper_const &me);
+    friend std::ostream &operator<<(std::ostream &out, const me_t &me)
+    {
+        out << "[";
+        const T *x = me.begin();
+        const T *e = me.end() - 1;
+        while (x != e)
+        {
+            out << *(x++) << ", ";
+        }
+        return out << *e << "]";
+    }
 };
 
 // ostream support of mat_t
