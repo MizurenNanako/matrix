@@ -33,9 +33,9 @@ mat_t<T>::mat_t(mat_t &&move)
 template <typename T>
 mat_t<T>::mat_t(const std::initializer_list<std::initializer_list<T>> &init)
     : _width{(*init.begin()).size()},
-      _height{init.size()},
-      _index_size{_width * _height + 1}
+      _height{init.size()}
 {
+    _index_size = _width * _height + 1;
     _data.reserve(_index_size);
     for (const auto &x : init)
     {
@@ -130,7 +130,7 @@ private:
 
 public:
     explicit index_helper(size_t i, mat_t &mat)
-        : _mat{mat}, index_helper_base{i, _mat._height, _mat._width}
+        : _mat{mat}, index_helper_base{i, mat._height, mat._width}
     {
     }
     ~index_helper() = default;
@@ -138,11 +138,11 @@ public:
     {
         return _mat.__at(base::_i, j);
     }
-    inline const T *begin() const
+    inline T *begin() const
     {
         return _mat._data.data() + _mat.__pos(base::_i, 0);
     }
-    inline const T *end() const
+    inline T *end() const
     {
         return _mat._data.data() + _mat.__pos(base::_i + 1, 0);
     }
@@ -160,7 +160,7 @@ private:
 
 public:
     explicit index_helper_const(size_t i, const mat_t &mat)
-        : _mat{mat}, index_helper_base{i, _mat._height, _mat._width}
+        : _mat{mat}, index_helper_base{i, mat._height, mat._width}
     {
     }
     ~index_helper_const() = default;
@@ -168,13 +168,13 @@ public:
     {
         return _mat.__get(base::_i, j);
     }
-    inline const T *begin() const
+    inline T *begin() const
     {
-        return _mat._data.data() + _mat.__pos(base::_i, 0);
+        return _mat._data.begin() + _mat.__pos(base::_i, 0);
     }
-    inline const T *end() const
+    inline T *end() const
     {
-        return _mat._data.data() + _mat.__pos(base::_i + 1, 0);
+        return _mat._data.begin() + _mat.__pos(base::_i + 1, 0);
     }
 };
 
@@ -201,6 +201,5 @@ std::ostream &operator<<(std::ostream &out, const mat_t<T> &m)
         ++x;
         out << "]";
     }
-
     return out << "]";
 }
