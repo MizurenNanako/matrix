@@ -3,6 +3,22 @@
         "vector": "cpp",
         "*.tcc": "cpp",
         "utility": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "*.tpp": "cpp",
+        "array": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "string_view": "cpp",
+        "initializer_list": "cpp",
+        "valarray": "cpp",
+        "iterator": "cpp",
+        "algorithm": "cpp",
+        "memory": "cpp",
+        "numeric": "cpp"
     }
 }

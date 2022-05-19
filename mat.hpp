@@ -8,19 +8,11 @@
 template <typename T>
 class mat_t
 {
-    // definition
+    // helper
 private:
-    class index_helper
-    {
-    private:
-        const size_t _i;
-        mat_t &_mat;
-
-    public:
-        explicit index_helper(size_t i, mat_t &mat) : _i{i}, _mat{mat} {}
-        ~index_helper() = default;
-        T &operator[](size_t j) const;
-    };
+    class index_helper_base;
+    class index_helper;
+    class index_helper_const;
 
     // data
 private:
@@ -31,20 +23,55 @@ private:
 
     // method
 public:
-    mat_t(size_t width = 0, size_t height = 0);
+    explicit mat_t(size_t width = 0, size_t height = 0);
+    mat_t(const mat_t &copy);
+    mat_t(mat_t &&move);
+    mat_t(const std::initializer_list<std::initializer_list<T>> &init);
     ~mat_t() = default;
 
-    std::pair<size_t, size_t> &&get_size();
-    mat_t<T>::index_helper operator[](size_t i) const;
+    inline std::pair<size_t, size_t> &&get_size()
+    {
+        return std::make_pair(_width, _height);
+    }
+    inline mat_t<T>::index_helper operator[](size_t i)
+    {
+        return mat_t<T>::index_helper(i, *this);
+    }
+    inline mat_t<T>::index_helper_const operator[](size_t i) const
+    {
+        return mat_t<T>::index_helper_const(i, *this);
+    }
+    inline mat_t<T>::index_helper begin()
+    {
+        return mat_t<T>::index_helper(0, *this);
+    }
+    inline mat_t<T>::index_helper_const begin() const
+    {
+        return mat_t<T>::index_helper_const(0, *this);
+    }
+    inline mat_t<T>::index_helper end()
+    {
+        mat_t<T>::index_helper(_height, *this);
+    }
+    inline mat_t<T>::index_helper_const end() const
+    {
+        return mat_t<T>::index_helper_const(_height, *this);
+    }
+
+    template <typename U>
+    friend std::ostream &operator<<(std::ostream &out, const mat_t<U> &m);
 
 private:
     inline size_t __pos(size_t i, size_t j) const
     {
         return i + j * _width;
     }
-    T &__at(size_t i, size_t j) const;
+    T &__at(size_t i, size_t j);
+    const T &__get(size_t i, size_t j) const;
 };
 
-#include "mat.cpp"
+#ifndef _mat_tpp
+#include "mat.tpp"
+#endif
 
 #endif //_mat_h
