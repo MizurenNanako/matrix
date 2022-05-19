@@ -19,6 +19,13 @@
         "iterator": "cpp",
         "algorithm": "cpp",
         "memory": "cpp",
-        "numeric": "cpp"
-    }
+        "numeric": "cpp",
+        "cwchar": "cpp",
+        "exception": "cpp",
+        "iosfwd": "cpp",
+        "istream": "cpp",
+        "new": "cpp",
+        "streambuf": "cpp"
+    },
+    "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
 }

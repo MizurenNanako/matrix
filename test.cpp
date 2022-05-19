@@ -12,7 +12,9 @@ int main()
     // std::cout << m[0][0] << " "
     //   << m[1][1] << std::endl;
 
-    std::cout << m;
+    std::cout << m << std::endl;
+
+    // std::cout << m[1] << std::endl;
 
     // std::vector<int> v;
     // v.begin();

@@ -112,10 +112,7 @@ public:
     {
         return !(_i == rhs._i);
     }
-    inline me_t &operator*()
-    {
-        return *this;
-    }
+    inline me_t &operator*() { return *this; }
 };
 
 // index helper
@@ -140,12 +137,13 @@ public:
     }
     inline T *begin() const
     {
-        return _mat._data.data() + _mat.__pos(base::_i, 0);
+        return const_cast<T *>(_mat._data.data() + _mat.__pos(base::_i, 0));
     }
     inline T *end() const
     {
-        return _mat._data.data() + _mat.__pos(base::_i + 1, 0);
+        return const_cast<T *>(_mat._data.data() + _mat.__pos(base::_i + 1, 0));
     }
+    inline me_t &operator*() { return *this; }
 };
 
 // const index helper
@@ -168,38 +166,50 @@ public:
     {
         return _mat.__get(base::_i, j);
     }
-    inline T *begin() const
+    inline const int *begin() const
     {
-        return _mat._data.begin() + _mat.__pos(base::_i, 0);
+        return _mat._data.data() + _mat.__pos(base::_i, 0);
     }
-    inline T *end() const
+    inline const int *end() const
     {
-        return _mat._data.begin() + _mat.__pos(base::_i + 1, 0);
+        return _mat._data.data() + _mat.__pos(base::_i + 1, 0);
     }
+    inline me_t &operator*() { return *this; }
+
+    template <typename U>
+    friend std::ostream &operator<<(
+        std::ostream &out,
+        const typename mat_t<U>::index_helper_const &me);
 };
 
-// ostream support
+// ostream support of mat_t
+
 template <typename T>
 std::ostream &operator<<(std::ostream &out, const mat_t<T> &m)
 {
     using i1 = typename mat_t<T>::index_helper_const;
-    out << "[";
-    i1 x = m.begin();
-    const i1 e1 = m.end();
-    while (x != e1)
+    auto helper =
+        [](std::ostream &out, i1 &me)
+        -> std::ostream &
     {
         out << "[";
-        T *y = const_cast<T *>(x.begin());
-        T *e2, *e2c = const_cast<T *>(x.end());
-        --e2;
-        while (y != e2)
+        const T *x = me.begin();
+        const T *e = me.end() - 1;
+        while (x != e)
         {
-            out << *y << ", ";
-            ++y;
+            out << *(x++) << ", ";
         }
-        out << *e2c;
+        return out << *e << "]";
+    };
+
+    out << "[";
+    i1 x = m.begin();
+    i1 e = m.end();
+    --e;
+    while (x != e)
+    {
+        helper(out, x) << ", ";
         ++x;
-        out << "]";
     }
-    return out << "]";
+    return helper(out, e) << "]";
 }
