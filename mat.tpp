@@ -5,6 +5,8 @@
 #define _mat_tpp
 #include "mat.hpp"
 
+#include <algorithm>
+
 // mat_t
 
 template <typename T>
@@ -78,6 +80,34 @@ const T &mat_t<T>::__get(size_t i, size_t j) const
     }
     throw(std::invalid_argument("Invalid index in mat_t __get()"));
 }
+
+/*******************************************************************/
+/*******************************************************************/
+
+template <typename T>
+mat_t<T> mat_t<T>::operator+=(const T &rhs)
+{
+    std::for_each(_data.begin(), _data.end(), [&rhs](T &i)
+                  { i += rhs; });
+    return *this;
+}
+template <typename T>
+mat_t<T> mat_t<T>::operator-=(const T &rhs)
+{
+    std::for_each(_data.begin(), _data.end(), [&rhs](T &i)
+                  { i -= rhs; });
+    return *this;
+}
+template <typename T>
+mat_t<T> mat_t<T>::operator*=(const T &rhs)
+{
+    std::for_each(_data.begin(), _data.end(), [&rhs](T &i)
+                  { i *= rhs; });
+    return *this;
+}
+
+/*******************************************************************/
+/*******************************************************************/
 
 // index helper base
 template <typename T>

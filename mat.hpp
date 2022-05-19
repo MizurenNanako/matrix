@@ -58,8 +58,13 @@ public:
         return mat_t<T>::index_helper_const(_height, *this);
     }
 
+    // arthmatic operators
+    mat_t<T> operator+=(const T &rhs);
+    mat_t<T> operator-=(const T &rhs);
+    mat_t<T> operator*=(const T &rhs);
+
     template <typename U>
-    friend std::ostream &operator<<(std::ostream &out, const mat_t<U> &m);
+    friend std::ostream &operator<<(std::ostream &, const mat_t<U> &);
 
 private:
     inline size_t __pos(size_t i, size_t j) const
