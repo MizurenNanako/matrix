@@ -93,9 +93,7 @@ protected:
 
 public:
     index_helper_base(size_t i, size_t h, size_t w)
-        : _i{i}, _h{h}, _w{w}
-    {
-    }
+        : _i{i}, _h{h}, _w{w} {}
     inline me_t &operator++()
     {
         if (++_i > _h)
@@ -112,8 +110,34 @@ public:
     {
         return !(_i == rhs._i);
     }
-    inline me_t &operator*() { return *this; }
 };
+
+#define _____helper_impl(C)                                            \
+    inline C T &operator[](size_t j) const                             \
+    {                                                                  \
+        return _mat.__get(base::_i, j);                                \
+    }                                                                  \
+    inline C T *begin() const                                          \
+    {                                                                  \
+        return _mat._data.data() + _mat.__pos(base::_i, 0);            \
+    }                                                                  \
+    inline C T *end() const                                            \
+    {                                                                  \
+        return _mat._data.data() + _mat.__pos(base::_i + 1, 0);        \
+    }                                                                  \
+    inline me_t &operator*() { return *this; }                         \
+                                                                       \
+    friend std::ostream &operator<<(std::ostream &out, const me_t &me) \
+    {                                                                  \
+        out << "[";                                                    \
+        C T *x = me.begin();                                           \
+        C T *e = me.end() - 1;                                         \
+        while (x != e)                                                 \
+        {                                                              \
+            out << *(x++) << ", ";                                     \
+        }                                                              \
+        return out << *e << "]";                                       \
+    }
 
 // index helper
 
@@ -131,31 +155,7 @@ public:
     {
     }
     ~index_helper() = default;
-    inline T &operator[](size_t j) const
-    {
-        return _mat.__at(base::_i, j);
-    }
-    inline T *begin() const
-    {
-        return const_cast<T *>(_mat._data.data() + _mat.__pos(base::_i, 0));
-    }
-    inline T *end() const
-    {
-        return const_cast<T *>(_mat._data.data() + _mat.__pos(base::_i + 1, 0));
-    }
-    inline me_t &operator*() { return *this; }
-    
-    friend std::ostream &operator<<(std::ostream &out, const me_t &me)
-    {
-        out << "[";
-        const T *x = me.begin();
-        const T *e = me.end() - 1;
-        while (x != e)
-        {
-            out << *(x++) << ", ";
-        }
-        return out << *e << "]";
-    }
+    _____helper_impl();
 };
 
 // const index helper
@@ -174,32 +174,10 @@ public:
     {
     }
     ~index_helper_const() = default;
-    inline const T &operator[](size_t j) const
-    {
-        return _mat.__get(base::_i, j);
-    }
-    inline const int *begin() const
-    {
-        return _mat._data.data() + _mat.__pos(base::_i, 0);
-    }
-    inline const int *end() const
-    {
-        return _mat._data.data() + _mat.__pos(base::_i + 1, 0);
-    }
-    inline me_t &operator*() { return *this; }
-
-    friend std::ostream &operator<<(std::ostream &out, const me_t &me)
-    {
-        out << "[";
-        const T *x = me.begin();
-        const T *e = me.end() - 1;
-        while (x != e)
-        {
-            out << *(x++) << ", ";
-        }
-        return out << *e << "]";
-    }
+    _____helper_impl(const);
 };
+
+#undef _____helper_impl
 
 // ostream support of mat_t
 
