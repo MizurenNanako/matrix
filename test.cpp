@@ -14,16 +14,9 @@ int main()
 
     std::cout << m << std::endl;
 
-    m += 2;
+    auto s = m.vertical_slice(1);
 
-    std::cout << m << std::endl;
-
-    auto n{m};
-
-    m *= 0.5;
-
-    std::cout << m << std::endl;
-    std::cout << n << std::endl;
+    std::cout << s << std::endl;
 
     return 0;
 }
