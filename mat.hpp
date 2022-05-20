@@ -10,6 +10,7 @@ class mat_t
 {
     // slice
 private:
+    class pretty_t;
     template <typename Y, typename _M, typename _T>
     class hslice_base;
     class hslice;
@@ -42,14 +43,8 @@ public:
     inline mat_t<T>::hslice end() { mat_t<T>::hslice(_height, *this); }
     inline mat_t<T>::chslice end() const { return mat_t<T>::chslice(_height, *this); }
 
-    inline mat_t<T>::vslice vertical_slice(size_t j)
-    {
-        return mat_t<T>::vslice(j, *this);
-    }
-    inline mat_t<T>::cvslice vertical_slice(size_t j) const
-    {
-        return mat_t<T>::cvslice(j, *this);
-    }
+    inline mat_t<T>::vslice vertical_slice(size_t j) { return mat_t<T>::vslice(j, *this); }
+    inline mat_t<T>::cvslice vertical_slice(size_t j) const { return mat_t<T>::cvslice(j, *this); }
 
     // arthmatic operators
     mat_t<T> operator+=(const T &rhs);
@@ -58,12 +53,10 @@ public:
 
     template <typename U>
     friend std::ostream &operator<<(std::ostream &, const mat_t<U> &);
+    const pretty_t pretty() { return pretty_t(this); }
 
 private:
-    inline size_t __pos(size_t i, size_t j) const
-    {
-        return i * _width + j;
-    }
+    inline size_t __pos(size_t i, size_t j) const { return i * _width + j; }
     T &__at(size_t i, size_t j);
     const T &__get(size_t i, size_t j) const;
 };
@@ -71,5 +64,43 @@ private:
 #ifndef _mat_tpp
 #include "mat.tpp"
 #endif
+
+template <typename T>
+class mat_t<T>::pretty_t
+{
+private:
+    const mat_t<T> &_rmat;
+    inline static std::ostream &setw(std::ostream &out, int w)
+    {
+        out.width(w);
+        return out;
+    }
+    static constexpr auto pretty_helper = [](std::ostream &out, const auto &me)
+        -> std::ostream &
+    {
+        out << "[";
+        const T *x = me.begin();
+        const T *e = me.end() - 1;
+        while (x != e)
+            setw(out, 5) << *(x++) << ",";
+        return setw(out, 5) << *e << "]";
+    };
+
+public:
+    pretty_t(const mat_t<T> *mat) : _rmat{*mat} {}
+    friend std::ostream &operator<<(std::ostream &out, const pretty_t &me)
+    {
+        out << "\t\b[";
+        auto x = me._rmat.begin();
+        auto e = me._rmat.end();
+        --e;
+        while (x != e)
+        {
+            pretty_helper(out, x) << ",\n\t";
+            ++x;
+        }
+        return pretty_helper(out, e) << "]\n";
+    }
+};
 
 #endif //_mat_h

@@ -25,7 +25,25 @@
         "iosfwd": "cpp",
         "istream": "cpp",
         "new": "cpp",
-        "streambuf": "cpp"
+        "streambuf": "cpp",
+        "functional": "cpp",
+        "cctype": "cpp",
+        "clocale": "cpp",
+        "cmath": "cpp",
+        "concepts": "cpp",
+        "cstdint": "cpp",
+        "cstdio": "cpp",
+        "cstdlib": "cpp",
+        "cwctype": "cpp",
+        "iostream": "cpp",
+        "limits": "cpp",
+        "numbers": "cpp",
+        "system_error": "cpp",
+        "type_traits": "cpp",
+        "tuple": "cpp",
+        "typeinfo": "cpp",
+        "iomanip": "cpp",
+        "sstream": "cpp"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
 }

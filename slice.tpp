@@ -20,33 +20,19 @@ public:
         : _i{i}, _rmat{mat} {}
     inline Y &operator++()
     {
-        if (++_i > _rmat._height)
-            throw(std::range_error("Slice out of height range in mat_t"));
+        ++_i;
         return *reinterpret_cast<Y *>(this);
     }
     inline Y &operator--()
     {
-        if (--_i > _rmat._height)
-            throw(std::range_error("Slice out of height range in mat_t"));
+        --_i;
         return *reinterpret_cast<Y *>(this);
     }
-    inline bool operator!=(const Y &rhs)
-    {
-        return (_i != rhs._i);
-    }
-    inline _T &operator[](size_t j) const
-    {
-        return _rmat.__at(_i, j);
-    }
-    inline _T *begin() const
-    {
-        return _rmat._data.data() + _rmat.__pos(_i, 0);
-    }
-    inline _T *end() const
-    {
-        return _rmat._data.data() + _rmat.__pos(_i + 1, 0);
-    }
-    inline Y &operator*() const { return *this; }
+    inline bool operator!=(const Y &rhs) { return (_i != rhs._i); }
+    inline _T &operator[](size_t j) const { return _rmat.__at(_i, j); }
+    inline _T *begin() const { return _rmat._data.data() + _rmat.__pos(_i, 0); }
+    inline _T *end() const { return _rmat._data.data() + _rmat.__pos(_i + 1, 0); }
+    inline Y &operator*() const { return *const_cast<Y *>(reinterpret_cast<const Y *>(this)); }
 
     friend std::ostream &operator<<(std::ostream &out, const Y &me)
     {
@@ -107,32 +93,18 @@ public:
         : _j{j}, _rmat{mat} {}
     inline Y &operator++()
     {
-        if (++_j > _rmat._width)
-            throw(std::range_error("Slice out of width range in mat_t"));
+        ++_j;
         return *reinterpret_cast<Y *>(this);
     }
     inline Y &operator--()
     {
-        if (--_j > _rmat._width)
-            throw(std::range_error("Slice out of width range in mat_t"));
+        --_j;
         return *reinterpret_cast<Y *>(this);
     }
-    inline bool operator!=(const Y &rhs) const
-    {
-        return (_j != rhs._j);
-    }
-    inline _T &operator[](size_t i) const
-    {
-        return _rmat.__get(i, _j);
-    }
-    inline viter_t begin() const
-    {
-        return viter_t{0, _j, _rmat};
-    }
-    inline viter_t end() const
-    {
-        return viter_t{_rmat._height, _j, _rmat};
-    }
+    inline bool operator!=(const Y &rhs) const { return (_j != rhs._j); }
+    inline _T &operator[](size_t i) const { return _rmat.__at(i, _j); }
+    inline viter_t begin() const { return viter_t{0, _j, _rmat}; }
+    inline viter_t end() const { return viter_t{_rmat._height, _j, _rmat}; }
     inline Y &operator*() const { return *this; }
 
     friend std::ostream &operator<<(std::ostream &out, const Y &me)

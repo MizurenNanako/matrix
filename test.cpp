@@ -7,15 +7,23 @@ int main()
         {1, 2, 3},
         {4, 5, -1, -2},
         {6},
-        // {9, 8, 7},
+        {9, -3, 7},
+        {8, 7},
     };
 
-    auto s = m.vertical_slice(1);
-    auto r = m[1];
+    // m *= 2;
 
-    std::cout << s << std::endl;
-    std::cout << r << std::endl;
-    std::cout << m[2][0] << std::endl;
+    // auto s = m.vertical_slice(1);
+    // auto r = m[1];
+
+    // std::cout << m << std::endl;
+    std::cout << "m:" << m.pretty() << std::endl;
+    // std::cout << s << std::endl;
+    // std::cout << r << std::endl;
+    // std::cout << m[3][1] << std::endl;
+
+    // std::cout << m[3][4] << std::endl; //error
+    // std::cout << m[5][0] << std::endl; // error
 
     return 0;
 }
