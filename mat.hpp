@@ -10,9 +10,14 @@ class mat_t
 {
     // helper
 private:
-    class index_helper_base;
-    class index_helper;
-    class index_helper_const;
+    template <typename Y, typename _M, typename _T>
+    class hslice_base;
+    class hslice;
+    class chslice;
+    template <typename Y, typename _M, typename _T>
+    class vslice_base;
+    class vslice;
+    class cvslice;
 
     // data
 private:
@@ -33,29 +38,29 @@ public:
     {
         return std::make_pair(_width, _height);
     }
-    inline mat_t<T>::index_helper operator[](size_t i)
+    inline mat_t<T>::hslice operator[](size_t i)
     {
-        return mat_t<T>::index_helper(i, *this);
+        return mat_t<T>::hslice(i, *this);
     }
-    inline mat_t<T>::index_helper_const operator[](size_t i) const
+    inline mat_t<T>::chslice operator[](size_t i) const
     {
-        return mat_t<T>::index_helper_const(i, *this);
+        return mat_t<T>::chslice(i, *this);
     }
-    inline mat_t<T>::index_helper begin()
+    inline mat_t<T>::hslice begin()
     {
-        return mat_t<T>::index_helper(0, *this);
+        return mat_t<T>::hslice(0, *this);
     }
-    inline mat_t<T>::index_helper_const begin() const
+    inline mat_t<T>::chslice begin() const
     {
-        return mat_t<T>::index_helper_const(0, *this);
+        return mat_t<T>::chslice(0, *this);
     }
-    inline mat_t<T>::index_helper end()
+    inline mat_t<T>::hslice end()
     {
-        mat_t<T>::index_helper(_height, *this);
+        mat_t<T>::hslice(_height, *this);
     }
-    inline mat_t<T>::index_helper_const end() const
+    inline mat_t<T>::chslice end() const
     {
-        return mat_t<T>::index_helper_const(_height, *this);
+        return mat_t<T>::chslice(_height, *this);
     }
 
     // arthmatic operators

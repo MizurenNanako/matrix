@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu May 19 20:02:19 2022
+# Make data base, printed on Fri May 20 17:01:36 2022
 
 # Variables
 
@@ -23,7 +23,7 @@ GTK_RC_FILES = /etc/gtk/gtkrc:/home/tci/.gtkrc:/home/tci/.config/gtkrc
 # environment
 CSF_EXCEPTION_PROMPT = 1
 # environment
-VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-5ccbb150-12c6-4e08-baab-6aaf753dbef1.sock
+VSCODE_IPC_HOOK_EXTHOST = /run/user/1000/vscode-ipc-cb815423-df0b-468e-83f1-3016b203e69e.sock
 # environment
 CSF_XmlOcafResource = /usr/share/opencascade/resources/XmlOcafResource
 # environment
@@ -103,7 +103,7 @@ MAKEFILE_LIST :=
 # environment
 VSCODE_VERBOSE_LOGGING = true
 # environment
-VSCODE_PID = 3256
+VSCODE_PID = 4256
 # environment
 XDG_SESSION_TYPE = x11
 # automatic
@@ -113,7 +113,7 @@ CSF_XSMessage = /usr/share/opencascade/resources/XSMessage
 # environment
 DRAWDEFAULT = /usr/share/opencascade/resources/DrawResources/DrawDefault
 # environment
-SESSION_MANAGER = local/tci-desktop:@/tmp/.ICE-unix/798,unix/tci-desktop:/tmp/.ICE-unix/798
+SESSION_MANAGER = local/tci-desktop:@/tmp/.ICE-unix/802,unix/tci-desktop:/tmp/.ICE-unix/802
 # automatic
 *F = $(notdir $*)
 # environment
@@ -193,7 +193,7 @@ XDG_VTNR = 1
 # makefile
 .DEFAULT_GOAL := 
 # environment
-SYSTEMD_EXEC_PID = 703
+SYSTEMD_EXEC_PID = 706
 # environment
 CSF_TObjMessage = /usr/share/opencascade/resources/TObj
 # environment
@@ -256,6 +256,7 @@ KDE_FULL_SESSION = true
 DOTNET_ROOT = /usr/share/dotnet
 # variable set hash-table stats:
 # Load=121/1024=12%, Rehash=0, Collisions=6/148=4%
+ 
 
 # Pattern-specific Variable Values
 
@@ -263,9 +264,9 @@ DOTNET_ROOT = /usr/share/dotnet
 
 # Directories
 
-# . (device 66307, inode 770967): 7 files, no impossibilities.
+# . (device 66307, inode 770967): 9 files, no impossibilities.
 
-# 7 files, no impossibilities in 1 directories.
+# 9 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -315,12 +316,12 @@ GNUmakefile:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 15 / storage = 128 B / avg = 8 B
-# current buf: size = 8162 B / used = 128 B / count = 15 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 17 / storage = 149 B / avg = 8 B
+# current buf: size = 8162 B / used = 149 B / count = 17 / avg = 8 B
 
-# strcache performance: lookups = 18 / hit rate = 16%
+# strcache performance: lookups = 20 / hit rate = 15%
 # hash-table stats:
-# Load=15/8192=0%, Rehash=0, Collisions=0/18=0%
-# Finished Make data base on Thu May 19 20:02:19 2022
+# Load=17/8192=0%, Rehash=0, Collisions=0/20=0%
+# Finished Make data base on Fri May 20 17:01:36 2022
 
  

@@ -1,11 +1,11 @@
-#ifndef _mat_hpp
-#error Do not intend to include this file
-#endif
-
 #define _mat_tpp
 #include "mat.hpp"
 
 #include <algorithm>
+
+#ifndef _slice_tpp
+#include "slice.tpp"
+#endif
 
 // mat_t
 
@@ -109,112 +109,12 @@ mat_t<T> mat_t<T>::operator*=(const T &rhs)
 /*******************************************************************/
 /*******************************************************************/
 
-// index helper base
-template <typename T>
-class mat_t<T>::index_helper_base
-{
-private:
-    using me_t = mat_t<T>::index_helper_base;
-
-protected:
-    size_t _i;
-    size_t _h;
-    size_t _w;
-
-public:
-    index_helper_base(size_t i, size_t h, size_t w)
-        : _i{i}, _h{h}, _w{w} {}
-    inline me_t &operator++()
-    {
-        if (++_i > _h)
-            throw(std::range_error("Iterator out of range in mat_t"));
-        return *this;
-    }
-    inline me_t &operator--()
-    {
-        if (--_i > _h)
-            throw(std::range_error("Iterator out of range in mat_t"));
-        return *this;
-    }
-    inline bool operator!=(const me_t &rhs)
-    {
-        return !(_i == rhs._i);
-    }
-};
-
-#define _____helper_impl(C)                                            \
-    inline C T &operator[](size_t j) const                             \
-    {                                                                  \
-        return _mat.__get(base::_i, j);                                \
-    }                                                                  \
-    inline C T *begin() const                                          \
-    {                                                                  \
-        return _mat._data.data() + _mat.__pos(base::_i, 0);            \
-    }                                                                  \
-    inline C T *end() const                                            \
-    {                                                                  \
-        return _mat._data.data() + _mat.__pos(base::_i + 1, 0);        \
-    }                                                                  \
-    inline me_t &operator*() { return *this; }                         \
-                                                                       \
-    friend std::ostream &operator<<(std::ostream &out, const me_t &me) \
-    {                                                                  \
-        out << "[";                                                    \
-        C T *x = me.begin();                                           \
-        C T *e = me.end() - 1;                                         \
-        while (x != e)                                                 \
-        {                                                              \
-            out << *(x++) << ", ";                                     \
-        }                                                              \
-        return out << *e << "]";                                       \
-    }
-
-// index helper
-
-template <typename T>
-class mat_t<T>::index_helper : public index_helper_base
-{
-private:
-    using me_t = mat_t<T>::index_helper;
-    using base = mat_t<T>::index_helper_base;
-    mat_t &_mat;
-
-public:
-    explicit index_helper(size_t i, mat_t &mat)
-        : _mat{mat}, index_helper_base{i, mat._height, mat._width}
-    {
-    }
-    ~index_helper() = default;
-    _____helper_impl();
-};
-
-// const index helper
-
-template <typename T>
-class mat_t<T>::index_helper_const : public index_helper_base
-{
-private:
-    using me_t = mat_t<T>::index_helper_const;
-    using base = mat_t<T>::index_helper_base;
-    const mat_t &_mat;
-
-public:
-    explicit index_helper_const(size_t i, const mat_t &mat)
-        : _mat{mat}, index_helper_base{i, mat._height, mat._width}
-    {
-    }
-    ~index_helper_const() = default;
-    _____helper_impl(const);
-};
-
-#undef _____helper_impl
-
 // ostream support of mat_t
 
 template <typename T>
 std::ostream &operator<<(std::ostream &out, const mat_t<T> &m)
 {
-    using i1 = typename mat_t<T>::index_helper_const;
+    using i1 = typename mat_t<T>::chslice;
     auto helper =
         [](std::ostream &out, i1 &me)
         -> std::ostream &
