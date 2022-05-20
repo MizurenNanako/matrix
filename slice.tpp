@@ -36,7 +36,7 @@ public:
     }
     inline _T &operator[](size_t j) const
     {
-        return _rmat.__get(_i, j);
+        return _rmat.__at(_i, j);
     }
     inline _T *begin() const
     {

@@ -62,7 +62,7 @@ public:
 private:
     inline size_t __pos(size_t i, size_t j) const
     {
-        return i * _height + j;
+        return i * _width + j;
     }
     T &__at(size_t i, size_t j);
     const T &__get(size_t i, size_t j) const;

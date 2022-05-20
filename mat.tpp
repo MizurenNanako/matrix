@@ -37,6 +37,9 @@ mat_t<T>::mat_t(const std::initializer_list<std::initializer_list<T>> &init)
     : _width{(*init.begin()).size()},
       _height{init.size()}
 {
+    for (const auto &x : init)
+        if (_width < x.size())
+            _width = x.size();
     _index_size = _width * _height + 1;
     _data.reserve(_index_size);
     for (const auto &x : init)
