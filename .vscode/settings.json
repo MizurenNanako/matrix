@@ -44,7 +44,8 @@
         "typeinfo": "cpp",
         "iomanip": "cpp",
         "sstream": "cpp",
-        "stdexcept": "cpp"
+        "stdexcept": "cpp",
+        "map": "cpp"
     },
     "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
 }

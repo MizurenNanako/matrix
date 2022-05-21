@@ -1,5 +1,8 @@
 #include <iostream>
+#include <algorithm>
 #include "mat.hpp"
+
+#include <map>
 
 int main()
 {
@@ -29,6 +32,13 @@ int main()
     auto n = m - 2;
     std::cout << n << std::endl;
     std::cout << m << std::endl;
+
+    std::sort(m[1].begin(), m[1].end());
+    std::cout << m.pretty() << std::endl;
+
+    auto &&vs = m.vertical_slice(0);
+    std::sort(vs.begin(), vs.end());
+    std::cout << m.pretty() << std::endl;
 
     return 0;
 }

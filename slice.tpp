@@ -118,14 +118,23 @@ private:
     _T *_p;
 
 public:
+    using iterator_category = std::random_access_iterator_tag;
+    using difference_type = size_t;
+    using value_type = T;
+    using pointer = T *;
+    using reference = T &;
     explicit viter_t(size_t i, size_t j, _M &mat) : _p{mat._data.data() + mat.__pos(i, j)}, _h{mat._height}, _w{mat._width} {}
     explicit viter_t(_T *p, size_t h, size_t w) : _h{h}, _w{w}, _p{p} {}
     ~viter_t() = default;
+    inline bool operator==(const me_t &rhs) const { return (_p == rhs._p); }
     inline bool operator!=(const me_t &rhs) const { return (_p != rhs._p); }
     inline _T &operator*() const { return *_p; }
     inline me_t &operator++() { return _p += _w, *this; }
     inline me_t &operator--() { return _p -= _w, *this; }
+    inline me_t operator+(size_t rhs) { return viter_t{_p + rhs * _w, _h, _w}; }
     inline me_t operator-(size_t rhs) { return viter_t{_p - rhs * _w, _h, _w}; }
+    inline size_t operator-(const me_t &rhs) { return (_p - rhs._p) / _w; }
+    inline bool operator<(const me_t &rhs) { return _p < rhs._p; }
 };
 
 template <typename T>
