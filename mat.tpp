@@ -69,9 +69,9 @@ template <typename T>
 T &mat_t<T>::__at(size_t i, size_t j)
 {
     if (i >= _height)
-        throw(std::invalid_argument("Invalid i in mat_t __at(i, j)"));
+        throw(std::out_of_range("i in mat_t __at(i, j) out of range."));
     if (j >= _width)
-        throw(std::invalid_argument("Invalid j in mat_t __at(i, j)"));
+        throw(std::out_of_range("j in mat_t __at(i, j) out of range."));
     if (_data.size() < _index_size)
         _data.resize(_index_size);
     return _data[__pos(i, j)];
@@ -81,9 +81,9 @@ template <typename T>
 const T &mat_t<T>::__get(size_t i, size_t j) const
 {
     if (i >= _height)
-        throw(std::invalid_argument("Invalid i in mat_t __get(i, j)"));
+        throw(std::out_of_range("i in mat_t __get(i, j) out of range."));
     if (j >= _width)
-        throw(std::invalid_argument("Invalid j in mat_t __get(i, j)"));
+        throw(std::out_of_range("j in mat_t __get(i, j) out of range."));
     return _data[__pos(i, j)];
 }
 

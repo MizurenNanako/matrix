@@ -8,7 +8,6 @@ int main()
         {4, 5, -1, -2},
         {6},
         {9, -3, 7},
-        {8, 7},
     };
 
     // m *= 2;
@@ -23,7 +22,7 @@ int main()
     // std::cout << m[3][1] << std::endl;
 
     // std::cout << m[3][4] << std::endl; //error
-    // std::cout << m[5][0] << std::endl; // error
+    std::cout << m[4][0] << std::endl; // error
 
     return 0;
 }
