@@ -35,16 +35,19 @@ public:
     mat_t(const std::initializer_list<std::initializer_list<T>> &init);
     ~mat_t() = default;
 
-    inline std::pair<size_t, size_t> &&get_size() { return std::make_pair(_width, _height); }
-    inline mat_t<T>::hslice operator[](size_t i) { return mat_t<T>::hslice(i, *this); }
-    inline mat_t<T>::chslice operator[](size_t i) const { return mat_t<T>::chslice(i, *this); }
+    inline std::pair<size_t, size_t> get_size() { return std::make_pair(_width, _height); }
     inline mat_t<T>::hslice begin() { return mat_t<T>::hslice(0, *this); }
     inline mat_t<T>::chslice begin() const { return mat_t<T>::chslice(0, *this); }
     inline mat_t<T>::hslice end() { mat_t<T>::hslice(_height, *this); }
     inline mat_t<T>::chslice end() const { return mat_t<T>::chslice(_height, *this); }
 
+    inline mat_t<T>::hslice horizontal_slice(size_t i) { return mat_t<T>::hslice(i, *this); }
+    inline mat_t<T>::chslice horizontal_slice(size_t i) const { return mat_t<T>::chslice(i, *this); }
     inline mat_t<T>::vslice vertical_slice(size_t j) { return mat_t<T>::vslice(j, *this); }
     inline mat_t<T>::cvslice vertical_slice(size_t j) const { return mat_t<T>::cvslice(j, *this); }
+
+    inline mat_t<T>::hslice operator[](size_t i) { return horizontal_slice(i); }
+    inline mat_t<T>::chslice operator[](size_t i) const { return horizontal_slice(i); }
 
     // arthmatic operators
     mat_t<T> operator+=(const T &rhs);

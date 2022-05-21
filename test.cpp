@@ -7,7 +7,6 @@ int main()
         {1, 2, 3},
         {4, 5, -1, -2},
         {6},
-        {9, -3, 7},
     };
 
     // m *= 2;
@@ -22,7 +21,10 @@ int main()
     // std::cout << m[3][1] << std::endl;
 
     // std::cout << m[3][4] << std::endl; //error
-    std::cout << m[4][0] << std::endl; // error
+    // std::cout << m[4][0] << std::endl; // error
+
+    auto [w, h] = m.get_size();
+    std::cout << "size: w=" << w << ", h=" << h << std::endl;
 
     return 0;
 }
