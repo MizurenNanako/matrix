@@ -24,16 +24,8 @@ protected:
 public:
     hslice_base(size_t i, _M &mat)
         : _i{i}, _rmat{mat} {}
-    inline Y &operator++()
-    {
-        ++_i;
-        return *reinterpret_cast<Y *>(this);
-    }
-    inline Y &operator--()
-    {
-        --_i;
-        return *reinterpret_cast<Y *>(this);
-    }
+    inline Y &operator++() { return ++_i, *reinterpret_cast<Y *>(this); }
+    inline Y &operator--() { return --_i, *reinterpret_cast<Y *>(this); }
     inline bool operator!=(const Y &rhs) { return (_i != rhs._i); }
     inline _T &operator[](size_t j) const { return _rmat.__at(_i, j); }
     inline _T *begin() const { return _rmat._data.data() + _rmat.__pos(_i, 0); }
@@ -59,8 +51,7 @@ private:
     using base = mat_t<T>::hslice_base<mat_t<T>::hslice, mat_t<T>, T>;
 
 public:
-    explicit hslice(size_t i, mat_t &mat)
-        : base::hslice_base{i, mat} {}
+    explicit hslice(size_t i, mat_t &mat) : base::hslice_base{i, mat} {}
     ~hslice() = default;
 };
 
@@ -72,8 +63,7 @@ private:
     using base = mat_t<T>::hslice_base<mat_t<T>::chslice, const mat_t<T>, const T>;
 
 public:
-    explicit chslice(size_t i, const mat_t &mat)
-        : base::hslice_base{i, mat} {}
+    explicit chslice(size_t i, const mat_t &mat) : base::hslice_base{i, mat} {}
     ~chslice() = default;
 };
 
@@ -87,8 +77,6 @@ class mat_t<T>::vslice_base
 {
 private:
     class viter_t;
-
-private:
     _M &_rmat;
 
 protected:
@@ -97,16 +85,8 @@ protected:
 public:
     vslice_base(size_t j, _M &mat)
         : _j{j}, _rmat{mat} {}
-    inline Y &operator++()
-    {
-        ++_j;
-        return *reinterpret_cast<Y *>(this);
-    }
-    inline Y &operator--()
-    {
-        --_j;
-        return *reinterpret_cast<Y *>(this);
-    }
+    inline Y &operator++() { return ++_j, *reinterpret_cast<Y *>(this); }
+    inline Y &operator--() { return --_j, *reinterpret_cast<Y *>(this); }
     inline bool operator!=(const Y &rhs) const { return (_j != rhs._j); }
     inline _T &operator[](size_t i) const { return _rmat.__at(i, _j); }
     inline viter_t begin() const { return viter_t{0, _j, _rmat}; }
@@ -127,8 +107,6 @@ public:
     }
 };
 
-// Iterator
-
 template <typename T>
 template <typename Y, typename _M, typename _T>
 class mat_t<T>::vslice_base<Y, _M, _T>::viter_t
@@ -140,33 +118,15 @@ private:
     _T *_p;
 
 public:
-    explicit viter_t(size_t i, size_t j, _M &mat)
-        : _p{mat._data.data() + mat.__pos(i, j)},
-          _h{mat._height},
-          _w{mat._width} {}
-    explicit viter_t(_T *p, size_t h, size_t w)
-        : _h{h}, _w{w}, _p{p} {}
+    explicit viter_t(size_t i, size_t j, _M &mat) : _p{mat._data.data() + mat.__pos(i, j)}, _h{mat._height}, _w{mat._width} {}
+    explicit viter_t(_T *p, size_t h, size_t w) : _h{h}, _w{w}, _p{p} {}
     ~viter_t() = default;
-
     inline bool operator!=(const me_t &rhs) const { return (_p != rhs._p); }
     inline _T &operator*() const { return *_p; }
-    inline me_t &operator++()
-    {
-        _p += _w;
-        return *this;
-    }
-    inline me_t &operator--()
-    {
-        _p -= _w;
-        return *this;
-    }
-    inline me_t operator-(size_t rhs)
-    {
-        return viter_t{_p - rhs * _w, _h, _w};
-    }
+    inline me_t &operator++() { return _p += _w, *this; }
+    inline me_t &operator--() { return _p -= _w, *this; }
+    inline me_t operator-(size_t rhs) { return viter_t{_p - rhs * _w, _h, _w}; }
 };
-
-// VSlice
 
 template <typename T>
 class mat_t<T>::vslice
@@ -176,8 +136,7 @@ private:
     using base = mat_t<T>::vslice_base<mat_t<T>::vslice, mat_t<T>, T>;
 
 public:
-    explicit vslice(size_t j, mat_t &mat)
-        : base::vslice_base{j, mat} {}
+    explicit vslice(size_t j, mat_t &mat) : base::vslice_base{j, mat} {}
     ~vslice() = default;
 };
 
@@ -189,8 +148,7 @@ private:
     using base = mat_t<T>::vslice_base<mat_t<T>::cvslice, const mat_t<T>, const T>;
 
 public:
-    explicit cvslice(size_t j, const mat_t &mat)
-        : base::vslice_base{j, mat} {}
+    explicit cvslice(size_t j, const mat_t &mat) : base::vslice_base{j, mat} {}
     ~cvslice() = default;
 };
 

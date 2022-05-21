@@ -36,6 +36,8 @@ public:
     mat_t(const std::initializer_list<std::initializer_list<T>> &init);
     ~mat_t() = default;
 
+    /*No need to overload assignment operators, compliers know it.*/
+
     inline std::pair<size_t, size_t> get_size() { return std::make_pair(_width, _height); }
     inline mat_t<T>::hslice begin() { return mat_t<T>::hslice(0, *this); }
     inline mat_t<T>::chslice begin() const { return mat_t<T>::chslice(0, *this); }
@@ -50,11 +52,7 @@ public:
     inline mat_t<T>::hslice operator[](size_t i) { return horizontal_slice(i); }
     inline mat_t<T>::chslice operator[](size_t i) const { return horizontal_slice(i); }
 
-    inline mat_t<T> &for_each(const std::function<void(T &)> &f)
-    {
-        std::for_each(_data.begin(), _data.end(), f);
-        return *this;
-    }
+    inline mat_t<T> &for_each(const std::function<void(T &)> &f) { return std::for_each(_data.begin(), _data.end(), f), *this; }
 
 #define __OPEQ_HELPER(op) return for_each([&rhs](T &i) { i op rhs; })
     // arthmatic assignment operators

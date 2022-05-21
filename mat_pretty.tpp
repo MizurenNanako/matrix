@@ -12,11 +12,7 @@ class mat_t<T>::pretty_t
 {
 private:
     const mat_t<T> &_rmat;
-    inline static std::ostream &setw(std::ostream &out, int w)
-    {
-        out.width(w);
-        return out;
-    }
+    inline static std::ostream &setw(std::ostream &out, int w) { return out.width(w), out; }
     static constexpr auto pretty_helper = [](std::ostream &out, const auto &me)
         -> std::ostream &
     {
@@ -37,10 +33,7 @@ public:
         auto e = me._rmat.end();
         --e;
         while (x != e)
-        {
-            pretty_helper(out, x) << ",\n\t";
-            ++x;
-        }
+            pretty_helper(out, x) << ",\n\t", ++x;
         return pretty_helper(out, e) << "]\n";
     }
 };

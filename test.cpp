@@ -14,8 +14,8 @@ int main()
     // auto s = m.vertical_slice(1);
     // auto r = m[1];
 
-    std::cout << m << std::endl;
-    // std::cout << "m:" << m.pretty() << std::endl;
+    // std::cout << m << std::endl;
+    std::cout << "m:" << m.pretty() << std::endl;
     // std::cout << s << std::endl;
     // std::cout << r << std::endl;
     // std::cout << m[3][1] << std::endl;

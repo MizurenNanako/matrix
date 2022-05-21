@@ -14,33 +14,13 @@
 // mat_t
 
 template <typename T>
-mat_t<T>::mat_t(size_t width, size_t height)
-    : _width{width}, _height{height},
-      _index_size{width * height}
-{
-    _data.reserve(_index_size + 1);
-}
-
+mat_t<T>::mat_t(size_t width, size_t height) : _width{width}, _height{height}, _index_size{width * height} { _data.reserve(_index_size + 1); }
 template <typename T>
-mat_t<T>::mat_t(const mat_t &copy)
-    : _width{copy._width}, _height{copy._height},
-      _index_size{copy._index_size},
-      _data{copy._data}
-{
-}
-
+mat_t<T>::mat_t(const mat_t &copy) : _width{copy._width}, _height{copy._height}, _index_size{copy._index_size}, _data{copy._data} {}
 template <typename T>
-mat_t<T>::mat_t(mat_t &&move)
-    : _width{move._width}, _height{move._height},
-      _index_size{move._index_size},
-      _data{std::move(move._data)}
-{
-}
-
+mat_t<T>::mat_t(mat_t &&move) : _width{move._width}, _height{move._height}, _index_size{move._index_size}, _data{std::move(move._data)} {}
 template <typename T>
-mat_t<T>::mat_t(const std::initializer_list<std::initializer_list<T>> &init)
-    : _width{(*init.begin()).size()},
-      _height{init.size()}
+mat_t<T>::mat_t(const std::initializer_list<std::initializer_list<T>> &init) : _width{(*init.begin()).size()}, _height{init.size()}
 {
     for (const auto &x : init)
         if (_width < x.size())
@@ -52,16 +32,9 @@ mat_t<T>::mat_t(const std::initializer_list<std::initializer_list<T>> &init)
         auto p = x.begin();
         int i = 0;
         while (i < _width && p != x.end())
-        {
-            _data.push_back(*p);
-            ++i;
-            ++p;
-        }
+            _data.push_back(*p), ++i, ++p;
         while (i < _width)
-        {
-            _data.push_back(0);
-            ++i;
-        }
+            _data.push_back(0), ++i;
     }
 }
 
@@ -87,11 +60,6 @@ const T &mat_t<T>::__get(size_t i, size_t j) const
     return _data[__pos(i, j)];
 }
 
-/*******************************************************************/
-/*******************************************************************/
-
-// ostream support of mat_t
-
 template <typename T>
 std::ostream &operator<<(std::ostream &out, const mat_t<T> &m)
 {
@@ -100,10 +68,7 @@ std::ostream &operator<<(std::ostream &out, const mat_t<T> &m)
     auto e = m.end();
     --e;
     while (x != e)
-    {
-        out << *x << ", ";
-        ++x;
-    }
+        out << *x << ", ", ++x;
     return out << *e << "]";
 }
 
