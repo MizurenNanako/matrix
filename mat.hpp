@@ -4,6 +4,7 @@
 #include <vector>
 #include <stdexcept>
 #include <ostream>
+#include <functional>
 
 template <typename T>
 class mat_t
@@ -49,10 +50,26 @@ public:
     inline mat_t<T>::hslice operator[](size_t i) { return horizontal_slice(i); }
     inline mat_t<T>::chslice operator[](size_t i) const { return horizontal_slice(i); }
 
+    inline mat_t<T> &for_each(const std::function<void(T &)> &f)
+    {
+        std::for_each(_data.begin(), _data.end(), f);
+        return *this;
+    }
+
+#define __OPEQ_HELPER(op) return for_each([&rhs](T &i) { i op rhs; })
+    // arthmatic assignment operators
+    inline mat_t<T> &operator+=(const T &rhs) { __OPEQ_HELPER(+=); }
+    inline mat_t<T> &operator-=(const T &rhs) { __OPEQ_HELPER(-=); }
+    inline mat_t<T> &operator*=(const T &rhs) { __OPEQ_HELPER(*=); }
+    inline mat_t<T> &operator/=(const T &rhs) { __OPEQ_HELPER(/=); }
+#undef __OPEQ_HELPER
+#define __OP_HELPER(op) return mat_t(*this) op rhs
     // arthmatic operators
-    mat_t<T> operator+=(const T &rhs);
-    mat_t<T> operator-=(const T &rhs);
-    mat_t<T> operator*=(const T &rhs);
+    inline mat_t<T> operator+(const T &rhs) { __OP_HELPER(+=); }
+    inline mat_t<T> operator-(const T &rhs) { __OP_HELPER(-=); }
+    inline mat_t<T> operator*(const T &rhs) { __OP_HELPER(*=); }
+    inline mat_t<T> operator/(const T &rhs) { __OP_HELPER(/=); }
+#undef __OP_HELPER
 
     template <typename U>
     friend std::ostream &operator<<(std::ostream &, const mat_t<U> &);

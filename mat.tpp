@@ -90,31 +90,6 @@ const T &mat_t<T>::__get(size_t i, size_t j) const
 /*******************************************************************/
 /*******************************************************************/
 
-template <typename T>
-mat_t<T> mat_t<T>::operator+=(const T &rhs)
-{
-    std::for_each(_data.begin(), _data.end(), [&rhs](T &i)
-                  { i += rhs; });
-    return *this;
-}
-template <typename T>
-mat_t<T> mat_t<T>::operator-=(const T &rhs)
-{
-    std::for_each(_data.begin(), _data.end(), [&rhs](T &i)
-                  { i -= rhs; });
-    return *this;
-}
-template <typename T>
-mat_t<T> mat_t<T>::operator*=(const T &rhs)
-{
-    std::for_each(_data.begin(), _data.end(), [&rhs](T &i)
-                  { i *= rhs; });
-    return *this;
-}
-
-/*******************************************************************/
-/*******************************************************************/
-
 // ostream support of mat_t
 
 template <typename T>
