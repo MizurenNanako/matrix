@@ -1,11 +1,15 @@
+#ifndef _mat_tpp
+
+#ifndef _mat_hpp
+#error Do not include this file directly, include mat.hpp instead.
+#endif
+
 #define _mat_tpp
 #include "mat.hpp"
 
 #include <algorithm>
 
-#ifndef _slice_tpp
 #include "slice.tpp"
-#endif
 
 // mat_t
 
@@ -127,3 +131,5 @@ std::ostream &operator<<(std::ostream &out, const mat_t<T> &m)
     }
     return out << *e << "]";
 }
+
+#endif

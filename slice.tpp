@@ -1,3 +1,9 @@
+#ifndef _slice_tpp
+
+#ifndef _mat_hpp
+#error Do not include this file directly, include mat.hpp instead.
+#endif
+
 #define _slice_tpp
 #include "mat.hpp"
 
@@ -187,3 +193,5 @@ public:
         : base::vslice_base{j, mat} {}
     ~cvslice() = default;
 };
+
+#endif
