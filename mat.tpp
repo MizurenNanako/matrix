@@ -60,11 +60,20 @@ mat_t<T> mat_t<T>::operator*(const mat_t<T> &rhs)
 {
     if (_width != rhs._height)
         throw(std::invalid_argument("Invalid mat_t operator*: dimension error."));
-    for (const auto& rows : *this)
-    {
-
-    }
     mat_t<T> r{rhs._width, _height};
+    for (const auto &rows : *this)
+    {
+        for (const auto &cols : rhs.tran())
+        {
+            T tmp{};
+            auto x1 = rows.begin();
+            auto x2 = cols.begin();
+            auto e = rows.end();
+            while (x1 != e)
+                (tmp += (*x1) * (*x2)), ++x1, ++x2;
+            r._data.push_back(tmp);
+        }
+    }
     return r;
 }
 

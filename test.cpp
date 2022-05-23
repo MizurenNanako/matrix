@@ -7,20 +7,18 @@
 int main()
 {
     mat_t<double> m{
-        {1, 2, 3},
+        {1, 2, 3, 4},
         {4, 5, -1, -2},
-        {6},
-        {-5},
-        {1},
     };
 
-/*     mat_t<double> n{
-        {1, 1, 1, 1},
-        {1},
-        {1},
-        {1},
-        {1},
-    }; */
+    mat_t<double> n{
+        {1, 2},
+        {4, 5},
+        {1, 2},
+        {4, 5},
+    };
+
+    auto q = m * n;
 
     // m *= 2;
 
@@ -30,7 +28,8 @@ int main()
     // auto q = m - n;
 
     std::cout << m.pretty() << std::endl;
-    std::cout << m.tran().pretty() << std::endl;
+    std::cout << n.pretty() << std::endl;
+    std::cout << q.pretty() << std::endl;
     // std::cout << m.pretty() << std::endl;
     // std::cout << q.pretty() << std::endl;
     // std::cout << *(m.tbegin() + 2) << std::endl;

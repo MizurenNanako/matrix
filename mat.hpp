@@ -86,7 +86,7 @@ public:
     template <typename U>
     friend std::ostream &operator<<(std::ostream &, const mat_t<U> &);
     inline const pretty_t<mat_t<T>> pretty() const { return pretty_t<mat_t<T>>(*this); }
-    inline const tran_helper_t tran() { return tran_helper_t(*this); }
+    inline const tran_helper_t tran() const { return tran_helper_t(*this); }
 
 private:
     inline size_t __pos(size_t i, size_t j) const { return i * _width + j; }
