@@ -17,8 +17,8 @@ private:
         -> std::ostream &
     {
         out << "[";
-        const T *x = me.begin();
-        const T *e = me.end() - 1;
+        const T *x = (*me).begin();
+        const T *e = (*me).end() - 1;
         while (x != e)
             setw(out, 5) << *(x++) << ",";
         return setw(out, 5) << *e << "]";

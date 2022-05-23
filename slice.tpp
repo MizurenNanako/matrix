@@ -32,8 +32,8 @@ public:
     friend std::ostream &operator<<(std::ostream &out, const Y &me)
     {
         out << "[";
-        _T *x = me.begin();
-        _T *e = me.end() - 1;
+        auto *x = me.begin();
+        auto *e = me.end() - 1;
         while (x != e)
             out << *(x++) << ", ";
         return out << *e << "]";
@@ -109,25 +109,54 @@ protected:
     size_t _j;
 
 public:
-    // class vslice_base_iter;
+    class iterator;
     vslice_base(size_t j, _M &mat) : _j{j}, _rmat{mat} {}
-    inline Y &operator++() { return ++_j, *reinterpret_cast<Y *>(this); }
-    inline Y &operator--() { return --_j, *reinterpret_cast<Y *>(this); }
+    // inline Y &operator++() { return ++_j, *reinterpret_cast<Y *>(this); }
+    // inline Y &operator--() { return --_j, *reinterpret_cast<Y *>(this); }
     inline bool operator!=(const Y &rhs) const { return (_j != rhs._j); }
     inline _T &operator[](size_t i) const { return _rmat.__at(i, _j); }
     inline viter_t begin() const { return viter_t{0, _j, _rmat}; }
     inline viter_t end() const { return viter_t{_rmat._height, _j, _rmat}; }
-    inline Y &operator*() const { return *this; }
-
+    // inline Y &operator*() const { return *this; }
+    inline iterator operator&() const { return iterator(_j, _rmat); }
     friend std::ostream &operator<<(std::ostream &out, const Y &me)
     {
         out << "[";
-        viter_t x = me.begin();
-        viter_t e = me.end() - 1;
+        auto x = me.begin();
+        auto e = me.end() - 1;
         while (x != e)
             out << *x << ", ", ++x;
         return out << *e << "]";
     }
+};
+
+template <typename T>
+template <typename Y, typename _M, typename _T>
+class mat_t<T>::vslice_base<Y, _M, _T>::iterator
+{
+private:
+    using me_t = mat_t<T>::vslice_base<Y, _M, _T>::iterator;
+    _M &_rmat;
+    size_t _j;
+
+public:
+    using iterator_category = std::random_access_iterator_tag;
+    using difference_type = size_t;
+    using value_type = Y;
+    using pointer = Y *;
+    using reference = Y &;
+    iterator(size_t j, _M &mat) : _j{j}, _rmat{mat} {}
+    inline me_t operator+(size_t rhs) { return iterator(_j + rhs, _rmat); }
+    inline me_t &operator++() { return ++_j, *reinterpret_cast<me_t *>(this); }
+    inline me_t &operator+=(size_t rhs) { return _j += rhs, *reinterpret_cast<me_t *>(this); }
+    inline me_t operator++(int) { return iterator(_j++, _rmat); }
+    inline size_t operator-(const me_t &rhs) { return _j - rhs._j; }
+    inline me_t operator-(size_t rhs) { return iterator(_j - rhs, _rmat); }
+    inline me_t &operator--() { return --_j, *reinterpret_cast<me_t *>(this); }
+    inline me_t &operator-=(size_t rhs) { return _j -= rhs, *reinterpret_cast<me_t *>(this); }
+    inline me_t operator--(int) { return iterator(_j--, _rmat); }
+    inline bool operator!=(const me_t &rhs) const { return (_j != rhs._j) || (&_rmat != &rhs._rmat); }
+    inline Y operator*() const { return _rmat.vertical_slice(_j); }
 };
 
 template <typename T>

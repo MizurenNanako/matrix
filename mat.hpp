@@ -22,6 +22,8 @@ private:
     class cvslice;
     using hsbi = typename mat_t<T>::hslice::iterator;
     using chsbi = typename mat_t<T>::chslice::iterator;
+    using vsbi = typename mat_t<T>::vslice::iterator;
+    using cvsbi = typename mat_t<T>::cvslice::iterator;
 
     // data
 private:
@@ -46,6 +48,11 @@ public:
     inline chsbi begin() const { return chsbi(0, *this); }
     inline hsbi end() { return hsbi(_height, *this); }
     inline chsbi end() const { return chsbi(_height, *this); }
+
+    inline vsbi tbegin() { return vsbi(0, *this); }
+    inline cvsbi tbegin() const { return cvsbi(0, *this); }
+    inline vsbi tend() { return vsbi(_width, *this); }
+    inline cvsbi tend() const { return cvsbi(_width, *this); }
 
     inline mat_t<T>::hslice horizontal_slice(size_t i) { return mat_t<T>::hslice(i, *this); }
     inline mat_t<T>::chslice horizontal_slice(size_t i) const { return mat_t<T>::chslice(i, *this); }
