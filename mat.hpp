@@ -11,7 +11,9 @@ class mat_t
 {
     // slice
 private:
+    template <typename MorT>
     class pretty_t;
+    class tran_helper_t;
     template <typename Y, typename _M, typename _T>
     class hslice_base;
     class hslice;
@@ -49,11 +51,6 @@ public:
     inline hsbi end() { return hsbi(_height, *this); }
     inline chsbi end() const { return chsbi(_height, *this); }
 
-    inline vsbi tbegin() { return vsbi(0, *this); }
-    inline cvsbi tbegin() const { return cvsbi(0, *this); }
-    inline vsbi tend() { return vsbi(_width, *this); }
-    inline cvsbi tend() const { return cvsbi(_width, *this); }
-
     inline mat_t<T>::hslice horizontal_slice(size_t i) { return mat_t<T>::hslice(i, *this); }
     inline mat_t<T>::chslice horizontal_slice(size_t i) const { return mat_t<T>::chslice(i, *this); }
     inline mat_t<T>::vslice vertical_slice(size_t j) { return mat_t<T>::vslice(j, *this); }
@@ -84,10 +81,12 @@ public:
     // matrix operators
     inline mat_t<T> operator+(const mat_t<T> &rhs) { return mat_t(*this) += rhs; }
     inline mat_t<T> operator-(const mat_t<T> &rhs) { return mat_t(*this) -= rhs; }
+    mat_t<T> operator*(const mat_t<T> &rhs);
 
     template <typename U>
     friend std::ostream &operator<<(std::ostream &, const mat_t<U> &);
-    const pretty_t pretty() { return pretty_t(this); }
+    inline const pretty_t<mat_t<T>> pretty() const { return pretty_t<mat_t<T>>(*this); }
+    inline const tran_helper_t tran() { return tran_helper_t(*this); }
 
 private:
     inline size_t __pos(size_t i, size_t j) const { return i * _width + j; }
@@ -96,6 +95,6 @@ private:
 };
 
 #include "mat.tpp"
-#include "mat_pretty.tpp"
+#include "mat_utils.tpp"
 
 #endif //_mat_h

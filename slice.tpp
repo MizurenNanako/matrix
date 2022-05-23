@@ -111,8 +111,6 @@ protected:
 public:
     class iterator;
     vslice_base(size_t j, _M &mat) : _j{j}, _rmat{mat} {}
-    // inline Y &operator++() { return ++_j, *reinterpret_cast<Y *>(this); }
-    // inline Y &operator--() { return --_j, *reinterpret_cast<Y *>(this); }
     inline bool operator!=(const Y &rhs) const { return (_j != rhs._j); }
     inline _T &operator[](size_t i) const { return _rmat.__at(i, _j); }
     inline viter_t begin() const { return viter_t{0, _j, _rmat}; }

@@ -54,6 +54,20 @@ template <typename T>
 mat_t<T> &mat_t<T>::operator-=(const mat_t<T> &rhs) { __OP_HELPER(-=); }
 #undef __OP_HELPER
 
+// matrix multiplication
+template <typename T>
+mat_t<T> mat_t<T>::operator*(const mat_t<T> &rhs)
+{
+    if (_width != rhs._height)
+        throw(std::invalid_argument("Invalid mat_t operator*: dimension error."));
+    for (const auto& rows : *this)
+    {
+
+    }
+    mat_t<T> r{rhs._width, _height};
+    return r;
+}
+
 template <typename T>
 T &mat_t<T>::__at(size_t i, size_t j)
 {

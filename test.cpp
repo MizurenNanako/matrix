@@ -14,23 +14,25 @@ int main()
         {1},
     };
 
-    mat_t<double> n{
+/*     mat_t<double> n{
         {1, 1, 1, 1},
         {1},
         {1},
         {1},
         {1},
-    };
+    }; */
 
     // m *= 2;
 
     // auto s = m.vertical_slice(1);
     // auto r = m[1];
 
-    auto q = m - n;
+    // auto q = m - n;
 
     std::cout << m.pretty() << std::endl;
-    std::cout << q.pretty() << std::endl;
+    std::cout << m.tran().pretty() << std::endl;
+    // std::cout << m.pretty() << std::endl;
+    // std::cout << q.pretty() << std::endl;
     // std::cout << *(m.tbegin() + 2) << std::endl;
 
     // std::cout << "m:" << m.pretty() << std::endl;
