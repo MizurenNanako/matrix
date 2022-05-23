@@ -22,16 +22,13 @@ protected:
     size_t _i;
 
 public:
-    hslice_base(size_t i, _M &mat)
-        : _i{i}, _rmat{mat} {}
-    inline Y &operator++() { return ++_i, *reinterpret_cast<Y *>(this); }
-    inline Y &operator--() { return --_i, *reinterpret_cast<Y *>(this); }
+    class iterator;
+    hslice_base(size_t i, _M &mat) : _i{i}, _rmat{mat} {}
     inline bool operator!=(const Y &rhs) { return (_i != rhs._i); }
     inline _T &operator[](size_t j) const { return _rmat.__at(_i, j); }
     inline _T *begin() const { return _rmat._data.data() + _rmat.__pos(_i, 0); }
     inline _T *end() const { return _rmat._data.data() + _rmat.__pos(_i + 1, 0); }
-    inline Y &operator*() const { return *const_cast<Y *>(reinterpret_cast<const Y *>(this)); }
-
+    inline iterator operator&() const { return iterator(_i, _rmat); }
     friend std::ostream &operator<<(std::ostream &out, const Y &me)
     {
         out << "[";
@@ -41,6 +38,30 @@ public:
             out << *(x++) << ", ";
         return out << *e << "]";
     }
+};
+
+template <typename T>
+template <typename Y, typename _M, typename _T>
+class mat_t<T>::hslice_base<Y, _M, _T>::iterator
+{
+private:
+    using me_t = mat_t<T>::hslice_base<Y, _M, _T>::iterator;
+    _M &_rmat;
+    size_t _i;
+
+public:
+    using iterator_category = std::random_access_iterator_tag;
+    using difference_type = size_t;
+    using value_type = Y;
+    using pointer = Y *;
+    using reference = Y &;
+    iterator(size_t i, _M &mat) : _i{i}, _rmat{mat} {}
+    inline me_t &operator++() { return ++_i, *reinterpret_cast<me_t *>(this); }
+    inline me_t operator++(int) { return iterator(_i++, _rmat); }
+    inline me_t &operator--() { return --_i, *reinterpret_cast<me_t *>(this); }
+    inline me_t operator--(int) { return iterator(_i--, _rmat); }
+    inline bool operator!=(const me_t &rhs) const { return (_i != rhs._i) || (&_rmat != &rhs._rmat); }
+    inline Y operator*() const { return _rmat.horizontal_slice(_i); }
 };
 
 template <typename T>
@@ -83,8 +104,8 @@ protected:
     size_t _j;
 
 public:
-    vslice_base(size_t j, _M &mat)
-        : _j{j}, _rmat{mat} {}
+    // class vslice_base_iter;
+    vslice_base(size_t j, _M &mat) : _j{j}, _rmat{mat} {}
     inline Y &operator++() { return ++_j, *reinterpret_cast<Y *>(this); }
     inline Y &operator--() { return --_j, *reinterpret_cast<Y *>(this); }
     inline bool operator!=(const Y &rhs) const { return (_j != rhs._j); }

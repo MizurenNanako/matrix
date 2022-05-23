@@ -20,6 +20,8 @@ private:
     class vslice_base;
     class vslice;
     class cvslice;
+    using hsbi = typename mat_t<T>::hslice::iterator;
+    using chsbi = typename mat_t<T>::chslice::iterator;
 
     // data
 private:
@@ -39,10 +41,11 @@ public:
     /*No need to overload assignment operators, compliers know it.*/
 
     inline std::pair<size_t, size_t> get_size() { return std::make_pair(_width, _height); }
-    inline mat_t<T>::hslice begin() { return mat_t<T>::hslice(0, *this); }
-    inline mat_t<T>::chslice begin() const { return mat_t<T>::chslice(0, *this); }
-    inline mat_t<T>::hslice end() { mat_t<T>::hslice(_height, *this); }
-    inline mat_t<T>::chslice end() const { return mat_t<T>::chslice(_height, *this); }
+
+    inline hsbi begin() { return hsbi(0, *this); }
+    inline chsbi begin() const { return chsbi(0, *this); }
+    inline hsbi end() { return hsbi(_height, *this); }
+    inline chsbi end() const { return chsbi(_height, *this); }
 
     inline mat_t<T>::hslice horizontal_slice(size_t i) { return mat_t<T>::hslice(i, *this); }
     inline mat_t<T>::chslice horizontal_slice(size_t i) const { return mat_t<T>::chslice(i, *this); }

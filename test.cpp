@@ -14,13 +14,19 @@ int main()
         {1},
     };
 
-    m *= 2;
+    // m *= 2;
 
     // auto s = m.vertical_slice(1);
-    // auto r = m[1];
+    auto r = m[1];
 
-    // std::cout << m << std::endl;
-    std::cout << "m:" << m.pretty() << std::endl;
+    std::cout << m << std::endl;
+
+    auto si = m.begin();
+    auto si2 = &r;
+
+    std::cout << *(++si2) << std::endl;
+
+    // std::cout << "m:" << m.pretty() << std::endl;
     // std::cout << s << std::endl;
     // std::cout << r << std::endl;
     // std::cout << m[3][1] << std::endl;
@@ -28,7 +34,7 @@ int main()
     // std::cout << m[3][4] << std::endl; //error
     // std::cout << m[4][0] << std::endl; // error
 
-    auto [w, h] = m.get_size();
+/*     auto [w, h] = m.get_size();
     std::cout << "size: w=" << w << ", h=" << h << std::endl;
 
     auto n = m / 2;
@@ -40,7 +46,7 @@ int main()
 
     auto &&vs = n.vertical_slice(0);
     std::sort(vs.begin(), vs.end());
-    std::cout << "n:" << n.pretty() << std::endl;
+    std::cout << "n:" << n.pretty() << std::endl; */
 
     return 0;
 }
