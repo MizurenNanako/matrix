@@ -64,13 +64,13 @@ public:
 
     inline mat_t<T> &for_each(const std::function<void(T &)> &f) { return std::for_each(_data.begin(), _data.end(), f), *this; }
 
-#define __OPEQ_HELPER(op) return for_each([&rhs](T &i) { i op rhs; })
+#define __OP_HELPER(op) return for_each([&rhs](T &i) { i op rhs; })
     // arthmatic assignment operators
-    inline mat_t<T> &operator+=(const T &rhs) { __OPEQ_HELPER(+=); }
-    inline mat_t<T> &operator-=(const T &rhs) { __OPEQ_HELPER(-=); }
-    inline mat_t<T> &operator*=(const T &rhs) { __OPEQ_HELPER(*=); }
-    inline mat_t<T> &operator/=(const T &rhs) { __OPEQ_HELPER(/=); }
-#undef __OPEQ_HELPER
+    inline mat_t<T> &operator+=(const T &rhs) { __OP_HELPER(+=); }
+    inline mat_t<T> &operator-=(const T &rhs) { __OP_HELPER(-=); }
+    inline mat_t<T> &operator*=(const T &rhs) { __OP_HELPER(*=); }
+    inline mat_t<T> &operator/=(const T &rhs) { __OP_HELPER(/=); }
+#undef __OP_HELPER
 #define __OP_HELPER(op) return mat_t(*this) op rhs
     // arthmatic operators
     inline mat_t<T> operator+(const T &rhs) { __OP_HELPER(+=); }
@@ -78,6 +78,12 @@ public:
     inline mat_t<T> operator*(const T &rhs) { __OP_HELPER(*=); }
     inline mat_t<T> operator/(const T &rhs) { __OP_HELPER(/=); }
 #undef __OP_HELPER
+    // matrix assignment operators
+    mat_t<T> &operator+=(const mat_t<T> &rhs);
+    mat_t<T> &operator-=(const mat_t<T> &rhs);
+    // matrix operators
+    inline mat_t<T> operator+(const mat_t<T> &rhs) { return mat_t(*this) += rhs; }
+    inline mat_t<T> operator-(const mat_t<T> &rhs) { return mat_t(*this) -= rhs; }
 
     template <typename U>
     friend std::ostream &operator<<(std::ostream &, const mat_t<U> &);

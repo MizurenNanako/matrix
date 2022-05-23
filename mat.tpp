@@ -38,6 +38,22 @@ mat_t<T>::mat_t(const std::initializer_list<std::initializer_list<T>> &init) : _
     }
 }
 
+#define __OP_HELPER(op)                                                                  \
+    if (_width != rhs._width || _height != rhs._height)                                  \
+        throw(std::invalid_argument("Invalid mat_t operator" #op ": dimension error.")); \
+    auto x = _data.begin();                                                              \
+    auto u = rhs._data.begin();                                                          \
+    auto &&e = _data.end();                                                              \
+    for (; x != e; ++x, ++u)                                                             \
+        *x op *u;                                                                        \
+    return *this;
+// matrix assignment operators
+template <typename T>
+mat_t<T> &mat_t<T>::operator+=(const mat_t<T> &rhs) { __OP_HELPER(+=); }
+template <typename T>
+mat_t<T> &mat_t<T>::operator-=(const mat_t<T> &rhs) { __OP_HELPER(-=); }
+#undef __OP_HELPER
+
 template <typename T>
 T &mat_t<T>::__at(size_t i, size_t j)
 {
