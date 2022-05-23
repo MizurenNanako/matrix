@@ -56,9 +56,14 @@ public:
     using pointer = Y *;
     using reference = Y &;
     iterator(size_t i, _M &mat) : _i{i}, _rmat{mat} {}
+    inline me_t operator+(size_t rhs) { return iterator(_i + rhs, _rmat); }
     inline me_t &operator++() { return ++_i, *reinterpret_cast<me_t *>(this); }
+    inline me_t &operator+=(size_t rhs) { return _i += rhs, *reinterpret_cast<me_t *>(this); }
     inline me_t operator++(int) { return iterator(_i++, _rmat); }
+    inline size_t operator-(const me_t &rhs) { return _i - rhs._i; }
+    inline me_t operator-(size_t rhs) { return iterator(_i - rhs, _rmat); }
     inline me_t &operator--() { return --_i, *reinterpret_cast<me_t *>(this); }
+    inline me_t &operator-=(size_t rhs) { return _i -= rhs, *reinterpret_cast<me_t *>(this); }
     inline me_t operator--(int) { return iterator(_i--, _rmat); }
     inline bool operator!=(const me_t &rhs) const { return (_i != rhs._i) || (&_rmat != &rhs._rmat); }
     inline Y operator*() const { return _rmat.horizontal_slice(_i); }
@@ -120,10 +125,7 @@ public:
         viter_t x = me.begin();
         viter_t e = me.end() - 1;
         while (x != e)
-        {
-            out << *x << ", ";
-            ++x;
-        }
+            out << *x << ", ", ++x;
         return out << *e << "]";
     }
 };
