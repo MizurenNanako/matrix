@@ -38,6 +38,27 @@ mat_t<T>::mat_t(const std::initializer_list<std::initializer_list<T>> &init) : _
     }
 }
 
+template <typename T>
+mat_t<T> &mat_t<T>::operator=(const mat_t<T> &rhs)
+{
+    _width = rhs._width;
+    _height = rhs._height;
+    _index_size = rhs._index_size;
+    _data = rhs._data;
+    return *this;
+}
+template <typename T>
+mat_t<T> &mat_t<T>::operator=(mat_t<T> &&rhs)
+{
+    if (this == &rhs)
+        return *this;
+    _width = rhs._width;
+    _height = rhs._height;
+    _index_size = rhs._index_size;
+    _data = std::move(rhs._data);
+    return *this;
+}
+
 #define __OP_HELPER(op)                                                                  \
     if (_width != rhs._width || _height != rhs._height)                                  \
         throw(std::invalid_argument("Invalid mat_t operator" #op ": dimension error.")); \

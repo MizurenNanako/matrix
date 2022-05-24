@@ -7,6 +7,8 @@
 
 #include "mat.hpp"
 
+static size_t __pretty_output_elem_width = 3;
+
 template <typename T>
 template <typename MorT>
 class mat_t<T>::pretty_t
@@ -21,8 +23,8 @@ private:
         auto x = (*me).begin();
         auto e = (*me).end() - 1;
         while (x != e)
-            setw(out, 5) << *x << ",", ++x;
-        return setw(out, 5) << *e << "]";
+            setw(out, __pretty_output_elem_width) << *x << ",", ++x;
+        return setw(out, __pretty_output_elem_width) << *e << "]";
     };
 
 public:

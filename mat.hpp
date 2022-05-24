@@ -60,6 +60,8 @@ public:
     inline mat_t<T>::chslice operator[](size_t i) const { return horizontal_slice(i); }
 
     inline mat_t<T> &for_each(const std::function<void(T &)> &f) { return std::for_each(_data.begin(), _data.end(), f), *this; }
+    mat_t<T> &operator=(const mat_t<T> &rhs);
+    mat_t<T> &operator=(mat_t<T> &&rhs);
 
 #define __OP_HELPER(op) return for_each([&rhs](T &i) { i op rhs; })
     // arthmatic assignment operators
