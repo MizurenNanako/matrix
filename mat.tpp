@@ -30,11 +30,24 @@ mat_t<T>::mat_t(const std::initializer_list<std::initializer_list<T>> &init) : _
     for (const auto &x : init)
     {
         auto p = x.begin();
-        int i = 0;
+        size_t i = 0;
         while (i < _width && p != x.end())
             _data.push_back(*p), ++i, ++p;
         while (i < _width)
             _data.push_back(0), ++i;
+    }
+}
+template <typename T>
+mat_t<T>::mat_t(const tran_t &view) : _width{view.width()}, _height{view.height()}
+{
+    _index_size = _width * _height;
+    _data.reserve(_index_size + 1);
+    for (const auto &x : view)
+    {
+        for (const auto y : x)
+        {
+            _data.push_back(y);
+        }
     }
 }
 

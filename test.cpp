@@ -49,6 +49,9 @@ int main()
     std::cout << "trn(m):" << m.tran() << std::endl;
     std::cout << "trn(m):" << m.tran().pretty() << std::endl;
 
+    mat_t<double> d = m.tran();
+    std::cout << "trn(m):" << d.pretty() << std::endl;
+
     std::cout << "Slice test" << std::endl;
     auto s = n.vertical_slice(1);
     std::cout << "vertical slice of n on pos 1:\n"

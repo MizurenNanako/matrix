@@ -23,7 +23,7 @@ protected:
 
 public:
     class iterator;
-    hslice_base(size_t i, _M &mat) : _i{i}, _rmat{mat} {}
+    hslice_base(size_t i, _M &mat) : _rmat{mat}, _i{i} {}
     inline bool operator!=(const Y &rhs) { return (_i != rhs._i); }
     inline _T &operator[](size_t j) const { return _rmat.__at(_i, j); }
     inline _T *begin() const { return _rmat._data.data() + _rmat.__pos(_i, 0); }
@@ -46,8 +46,8 @@ class mat_t<T>::hslice_base<Y, _M, _T>::iterator
 {
 private:
     using me_t = mat_t<T>::hslice_base<Y, _M, _T>::iterator;
-    _M &_rmat;
     size_t _i;
+    _M &_rmat;
 
 public:
     using iterator_category = std::random_access_iterator_tag;
@@ -110,7 +110,7 @@ protected:
 
 public:
     class iterator;
-    vslice_base(size_t j, _M &mat) : _j{j}, _rmat{mat} {}
+    vslice_base(size_t j, _M &mat) : _rmat{mat}, _j{j} {}
     inline bool operator!=(const Y &rhs) const { return (_j != rhs._j); }
     inline _T &operator[](size_t i) const { return _rmat.__at(i, _j); }
     inline viter_t begin() const { return viter_t{0, _j, _rmat}; }
@@ -143,7 +143,7 @@ public:
     using value_type = Y;
     using pointer = Y *;
     using reference = Y &;
-    iterator(size_t j, _M &mat) : _j{j}, _rmat{mat} {}
+    iterator(size_t j, _M &mat) : _rmat{mat}, _j{j} {}
     inline me_t operator+(size_t rhs) { return iterator(_j + rhs, _rmat); }
     inline me_t &operator++() { return ++_j, *reinterpret_cast<me_t *>(this); }
     inline me_t &operator+=(size_t rhs) { return _j += rhs, *reinterpret_cast<me_t *>(this); }
@@ -173,7 +173,7 @@ public:
     using value_type = T;
     using pointer = T *;
     using reference = T &;
-    explicit viter_t(size_t i, size_t j, _M &mat) : _p{mat._data.data() + mat.__pos(i, j)}, _h{mat._height}, _w{mat._width} {}
+    explicit viter_t(size_t i, size_t j, _M &mat) : _h{mat._height}, _w{mat._width}, _p{mat._data.data() + mat.__pos(i, j)} {}
     explicit viter_t(_T *p, size_t h, size_t w) : _h{h}, _w{w}, _p{p} {}
     ~viter_t() = default;
     inline bool operator==(const me_t &rhs) const { return (_p == rhs._p); }

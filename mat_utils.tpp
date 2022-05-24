@@ -42,20 +42,22 @@ public:
 };
 
 template <typename T>
-class mat_t<T>::tran_helper_t
+class mat_t<T>::tran_t
 {
 private:
     const mat_t<T> &_rmat;
 
 public:
-    tran_helper_t(const mat_t<T> &mat) : _rmat{mat} {}
-    ~tran_helper_t() = default;
+    tran_t(const mat_t<T> &mat) : _rmat{mat} {}
+    ~tran_t() = default;
+    inline size_t width() const { return _rmat._height; }
+    inline size_t height() const { return _rmat._width; }
     inline mat_t<T>::cvsbi begin() const { return mat_t<T>::cvsbi(0, _rmat); }
     inline mat_t<T>::cvsbi end() const { return mat_t<T>::cvsbi(_rmat._width, _rmat); }
     inline mat_t<T>::chslice horizontal_slice(size_t i) const { return mat_t<T>::cvslice(i, _rmat); }
     inline mat_t<T>::cvslice vertical_slice(size_t j) const { return mat_t<T>::chslice(j, _rmat); }
     inline mat_t<T>::chslice operator[](size_t i) const { return horizontal_slice(i); }
-    friend std::ostream &operator<<(std::ostream &out, const tran_helper_t &m)
+    friend std::ostream &operator<<(std::ostream &out, const tran_t &m)
     {
         out << "[";
         auto x = m.begin();
@@ -65,9 +67,9 @@ public:
             out << *x << ", ", ++x;
         return out << *e << "]";
     }
-    inline const pretty_t<tran_helper_t> pretty() const
+    inline const pretty_t<tran_t> pretty() const
     {
-        return pretty_t<tran_helper_t>(*this);
+        return pretty_t<tran_t>(*this);
     }
 };
 

@@ -11,9 +11,9 @@ class mat_t
 {
     // slice
 private:
+    class tran_t;
     template <typename MorT>
     class pretty_t;
-    class tran_helper_t;
     template <typename Y, typename _M, typename _T>
     class hslice_base;
     class hslice;
@@ -40,6 +40,7 @@ public:
     mat_t(const mat_t &copy);
     mat_t(mat_t &&move);
     mat_t(const std::initializer_list<std::initializer_list<T>> &init);
+    mat_t(const tran_t& view);
     ~mat_t() = default;
 
     /*No need to overload assignment operators, compliers know it.*/
@@ -88,7 +89,7 @@ public:
     template <typename U>
     friend std::ostream &operator<<(std::ostream &, const mat_t<U> &);
     inline const pretty_t<mat_t<T>> pretty() const { return pretty_t<mat_t<T>>(*this); }
-    inline const tran_helper_t tran() const { return tran_helper_t(*this); }
+    inline const tran_t tran() const { return tran_t(*this); }
 
 private:
     inline size_t __pos(size_t i, size_t j) const { return i * _width + j; }
