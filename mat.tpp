@@ -133,16 +133,16 @@ const T &mat_t<T>::__get(size_t i, size_t j) const
     return _data[__pos(i, j)];
 }
 
-template <typename T>
-std::ostream &operator<<(std::ostream &out, const mat_t<T> &m)
-{
-    out << "[";
-    auto x = m.begin();
-    auto e = m.end();
-    --e;
-    while (x != e)
-        out << *x << ", ", ++x;
-    return out << *e << "]";
-}
+// template <typename T>
+// std::ostream &operator<<(std::ostream &out, const mat_t<T> &m)
+// {
+//     out << "[";
+//     auto x = m.begin();
+//     auto e = m.end();
+//     --e;
+//     while (x != e)
+//         out << *x << ", ", ++x;
+//     return out << *e << "]";
+// }
 
 #endif

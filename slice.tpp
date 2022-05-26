@@ -8,66 +8,64 @@
 #include "mat.hpp"
 
 /****************************************************/
+/**                       all                      **/
+/****************************************************/
+
+#define __slice_iter_impl(dir, Dir)                                                                                \
+    template <typename T>                                                                                          \
+    template <typename Y, typename _M, typename _T>                                                                \
+    class mat_t<T>::dir##slice_base<Y, _M, _T>::iterator                                                           \
+    {                                                                                                              \
+    private:                                                                                                       \
+        using me_t = mat_t<T>::dir##slice_base<Y, _M, _T>::iterator;                                               \
+        _M &_rmat;                                                                                                 \
+        size_t _index;                                                                                             \
+                                                                                                                   \
+    public:                                                                                                        \
+        using iterator_category = std::random_access_iterator_tag;                                                 \
+        using difference_type = size_t;                                                                            \
+        using value_type = Y;                                                                                      \
+        using pointer = Y *;                                                                                       \
+        using reference = Y &;                                                                                     \
+        iterator(size_t i, _M &mat) : _rmat{mat}, _index{i} {}                                                     \
+        inline me_t operator+(size_t rhs) { return iterator(_index + rhs, _rmat); }                                \
+        inline me_t &operator++() { return ++_index, *reinterpret_cast<me_t *>(this); }                            \
+        inline me_t &operator+=(size_t rhs) { return _index += rhs, *reinterpret_cast<me_t *>(this); }             \
+        inline me_t operator++(int) { return iterator(_index++, _rmat); }                                          \
+        inline size_t operator-(const me_t &rhs) { return _index - rhs._index; }                                   \
+        inline me_t operator-(size_t rhs) { return iterator(_index - rhs, _rmat); }                                \
+        inline me_t &operator--() { return --_index, *reinterpret_cast<me_t *>(this); }                            \
+        inline me_t &operator-=(size_t rhs) { return _index -= rhs, *reinterpret_cast<me_t *>(this); }             \
+        inline me_t operator--(int) { return iterator(_index--, _rmat); }                                          \
+        inline bool operator!=(const me_t &rhs) const { return (_index != rhs._index) || (&_rmat != &rhs._rmat); } \
+        inline Y operator*() const { return _rmat.Dir##_slice(_index); }                                           \
+    };
+
+/****************************************************/
 /**                   horizontal                   **/
 /****************************************************/
 
 template <typename T>
 template <typename Y, typename _M, typename _T>
-class mat_t<T>::hslice_base
+class mat_t<T>::hslice_base : liner_output<mat_t<T>::hslice_base<Y, _M, _T>>
 {
 private:
     _M &_rmat;
 
 protected:
-    size_t _i;
+    size_t _index;
 
 public:
     class iterator;
-    hslice_base(size_t i, _M &mat) : _rmat{mat}, _i{i} {}
-    inline bool operator!=(const Y &rhs) { return (_i != rhs._i); }
-    inline _T &operator[](size_t j) const { return _rmat.__at(_i, j); }
-    inline _T *begin() const { return _rmat._data.data() + _rmat.__pos(_i, 0); }
-    inline _T *end() const { return _rmat._data.data() + _rmat.__pos(_i + 1, 0); }
-    inline iterator operator&() const { return iterator(_i, _rmat); }
-    friend std::ostream &operator<<(std::ostream &out, const Y &me)
-    {
-        out << "[";
-        auto *x = me.begin();
-        auto *e = me.end() - 1;
-        while (x != e)
-            out << *(x++) << ", ";
-        return out << *e << "]";
-    }
+    hslice_base(size_t i, _M &mat) : _rmat{mat}, _index{i} {}
+    inline _T *begin() const { return _rmat._data.data() + _rmat.__pos(_index, 0); }
+    inline _T *end() const { return _rmat._data.data() + _rmat.__pos(_index + 1, 0); }
+    inline _T &operator[](size_t j) const { return _rmat.__at(_index, j); }
+    inline bool operator!=(const Y &rhs) { return (_index != rhs._index); }
+    inline iterator operator&() const { return iterator(_index, _rmat); }
 };
 
-template <typename T>
-template <typename Y, typename _M, typename _T>
-class mat_t<T>::hslice_base<Y, _M, _T>::iterator
-{
-private:
-    using me_t = mat_t<T>::hslice_base<Y, _M, _T>::iterator;
-    size_t _i;
-    _M &_rmat;
-
-public:
-    using iterator_category = std::random_access_iterator_tag;
-    using difference_type = size_t;
-    using value_type = Y;
-    using pointer = Y *;
-    using reference = Y &;
-    iterator(size_t i, _M &mat) : _i{i}, _rmat{mat} {}
-    inline me_t operator+(size_t rhs) { return iterator(_i + rhs, _rmat); }
-    inline me_t &operator++() { return ++_i, *reinterpret_cast<me_t *>(this); }
-    inline me_t &operator+=(size_t rhs) { return _i += rhs, *reinterpret_cast<me_t *>(this); }
-    inline me_t operator++(int) { return iterator(_i++, _rmat); }
-    inline size_t operator-(const me_t &rhs) { return _i - rhs._i; }
-    inline me_t operator-(size_t rhs) { return iterator(_i - rhs, _rmat); }
-    inline me_t &operator--() { return --_i, *reinterpret_cast<me_t *>(this); }
-    inline me_t &operator-=(size_t rhs) { return _i -= rhs, *reinterpret_cast<me_t *>(this); }
-    inline me_t operator--(int) { return iterator(_i--, _rmat); }
-    inline bool operator!=(const me_t &rhs) const { return (_i != rhs._i) || (&_rmat != &rhs._rmat); }
-    inline Y operator*() const { return _rmat.horizontal_slice(_i); }
-};
+__slice_iter_impl(h, horizontal);
 
 template <typename T>
 class mat_t<T>::hslice
@@ -99,63 +97,26 @@ public:
 
 template <typename T>
 template <typename Y, typename _M, typename _T>
-class mat_t<T>::vslice_base
+class mat_t<T>::vslice_base : liner_output<mat_t<T>::vslice_base<Y, _M, _T>>
 {
 private:
     class viter_t;
     _M &_rmat;
 
 protected:
-    size_t _j;
+    size_t _index;
 
 public:
     class iterator;
-    vslice_base(size_t j, _M &mat) : _rmat{mat}, _j{j} {}
-    inline bool operator!=(const Y &rhs) const { return (_j != rhs._j); }
-    inline _T &operator[](size_t i) const { return _rmat.__at(i, _j); }
-    inline viter_t begin() const { return viter_t{0, _j, _rmat}; }
-    inline viter_t end() const { return viter_t{_rmat._height, _j, _rmat}; }
-    // inline Y &operator*() const { return *this; }
-    inline iterator operator&() const { return iterator(_j, _rmat); }
-    friend std::ostream &operator<<(std::ostream &out, const Y &me)
-    {
-        out << "[";
-        auto x = me.begin();
-        auto e = me.end() - 1;
-        while (x != e)
-            out << *x << ", ", ++x;
-        return out << *e << "]";
-    }
+    vslice_base(size_t j, _M &mat) : _rmat{mat}, _index{j} {}
+    inline viter_t begin() const { return viter_t{0, _index, _rmat}; }
+    inline viter_t end() const { return viter_t{_rmat._height, _index, _rmat}; }
+    inline _T &operator[](size_t i) const { return _rmat.__at(i, _index); }
+    inline bool operator!=(const Y &rhs) { return (_index != rhs._index); }
+    inline iterator operator&() const { return iterator(_index, _rmat); }
 };
 
-template <typename T>
-template <typename Y, typename _M, typename _T>
-class mat_t<T>::vslice_base<Y, _M, _T>::iterator
-{
-private:
-    using me_t = mat_t<T>::vslice_base<Y, _M, _T>::iterator;
-    _M &_rmat;
-    size_t _j;
-
-public:
-    using iterator_category = std::random_access_iterator_tag;
-    using difference_type = size_t;
-    using value_type = Y;
-    using pointer = Y *;
-    using reference = Y &;
-    iterator(size_t j, _M &mat) : _rmat{mat}, _j{j} {}
-    inline me_t operator+(size_t rhs) { return iterator(_j + rhs, _rmat); }
-    inline me_t &operator++() { return ++_j, *reinterpret_cast<me_t *>(this); }
-    inline me_t &operator+=(size_t rhs) { return _j += rhs, *reinterpret_cast<me_t *>(this); }
-    inline me_t operator++(int) { return iterator(_j++, _rmat); }
-    inline size_t operator-(const me_t &rhs) { return _j - rhs._j; }
-    inline me_t operator-(size_t rhs) { return iterator(_j - rhs, _rmat); }
-    inline me_t &operator--() { return --_j, *reinterpret_cast<me_t *>(this); }
-    inline me_t &operator-=(size_t rhs) { return _j -= rhs, *reinterpret_cast<me_t *>(this); }
-    inline me_t operator--(int) { return iterator(_j--, _rmat); }
-    inline bool operator!=(const me_t &rhs) const { return (_j != rhs._j) || (&_rmat != &rhs._rmat); }
-    inline Y operator*() const { return _rmat.vertical_slice(_j); }
-};
+__slice_iter_impl(v, vertical);
 
 template <typename T>
 template <typename Y, typename _M, typename _T>

@@ -6,8 +6,10 @@
 #include <ostream>
 #include <functional>
 
+#include "liner_output.hpp"
+
 template <typename T>
-class mat_t
+class mat_t : liner_output<mat_t<T>>
 {
     // slice
 private:
@@ -86,8 +88,8 @@ public:
     inline mat_t<T> operator-(const mat_t<T> &rhs) { return mat_t(*this) -= rhs; }
     mat_t<T> operator*(const mat_t<T> &rhs);
 
-    template <typename U>
-    friend std::ostream &operator<<(std::ostream &, const mat_t<U> &);
+    // template <typename U>
+    // friend std::ostream &operator<<(std::ostream &, const mat_t<U> &);
     inline const pretty_t<mat_t<T>> pretty() const { return pretty_t<mat_t<T>>(*this); }
     inline const tran_t tran() const { return tran_t(*this); }
 

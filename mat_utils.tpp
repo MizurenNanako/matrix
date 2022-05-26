@@ -42,7 +42,7 @@ public:
 };
 
 template <typename T>
-class mat_t<T>::tran_t
+class mat_t<T>::tran_t : liner_output<mat_t<T>::tran_t>
 {
 private:
     const mat_t<T> &_rmat;
@@ -57,16 +57,16 @@ public:
     inline mat_t<T>::chslice horizontal_slice(size_t i) const { return mat_t<T>::cvslice(i, _rmat); }
     inline mat_t<T>::cvslice vertical_slice(size_t j) const { return mat_t<T>::chslice(j, _rmat); }
     inline mat_t<T>::chslice operator[](size_t i) const { return horizontal_slice(i); }
-    friend std::ostream &operator<<(std::ostream &out, const tran_t &m)
-    {
-        out << "[";
-        auto x = m.begin();
-        auto e = m.end();
-        --e;
-        while (x != e)
-            out << *x << ", ", ++x;
-        return out << *e << "]";
-    }
+    // friend std::ostream &operator<<(std::ostream &out, const tran_t &m)
+    // {
+    //     out << "[";
+    //     auto x = m.begin();
+    //     auto e = m.end();
+    //     --e;
+    //     while (x != e)
+    //         out << *x << ", ", ++x;
+    //     return out << *e << "]";
+    // }
     inline const pretty_t<tran_t> pretty() const
     {
         return pretty_t<tran_t>(*this);
